@@ -19,7 +19,6 @@ Global ImgFileOn
 Global Energy
 Global FightMode
 Global SpendLapis
-Global Lapis
 Global ImagePath
 Global FightPath
 
@@ -82,18 +81,12 @@ LoadConfig()
 	IniRead, ImgFileOn, %A_ScriptDir%/data/config/config.ini, ImageSearch, GilSearch
 	IniRead, FightMode, %A_ScriptDir%/data/config/config.ini, FightMode, Method
 	IniRead, SpendLapis, %A_ScriptDir%/data/config/config.ini, Options, SpendLapis
-	IniRead, Lapis, %A_ScriptDir%/data/config/config.ini, Options, LapisToSpend
 	
 	;Cleanup new settings on old config files.
 	if SpendLapis = ERROR
 	{
-		IniWrite, 0, %A_ScriptDir%/data/config/config.ini, Options, LapisToSpend
-		Lapis := 0
-	}
-	if SpendLapis = ERROR
-	{
-		IniWrite, 0, %A_ScriptDir%/data/config/config.ini, Options, SpendLapis
-		SpendLapis := 0
+		IniWrite, % "", %A_ScriptDir%/data/config/config.ini, Options, SpendLapis
+		SpendLapis =
 	}
 	if FightMode = ERROR
 	{
@@ -136,13 +129,13 @@ LoadConfig()
 	count:=0
 	Loop, Files, %A_ScriptDir%\%ImagePath%\*.png, R
 	{
-		if A_LoopFileName in step1.png,step2.png,step3.png,ic1.png,ic2.png,reward1.png
+		if A_LoopFileName in step1.png,step2.png,step3.png,step4.png,ic1.png,ic2.png,reward1.png
 		{
 			count+=1
 		}
 	}
 	
-	if count < 6
+	if count < 7
 	{
 		Msgbox, 4, , Error: Missing image files. (Count:%count%) `n`n Run calibration?
 		IfMsgBox, no

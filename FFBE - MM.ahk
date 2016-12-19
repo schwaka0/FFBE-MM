@@ -49,8 +49,11 @@ else			;if caps on
 	CoordMode, ToolTip, Screen 
 	CoordMode, Mouse, Relative
 	MouseGetPos xx, yy 
+;	SetFormat, float, 0.2
 	sx := xx/MiddleX
 	sy := yy/MiddleY
+;	SetFormat, float, 0
+
 	tt = 1
 	tooltip Title: %wintitle%`nMiddleX/Y: %MiddleX%/%MiddleY%`nX/Y - sX/sY: %xx%/%yy% - %sx%/%sy%`nExploration: %Exploration%`nEnergyTimer: %EnergyTimer%`nInCombat: %inCombat%`nFightPath: %FightPath%`nFightRound: %FightRound%`nDebug: %debug%`nDebug2: %debug2%`nDebug3: %debug3%`nImgMethod: %ImgMethod%`nImgFile: %ImgFile%`nFightMode: %FightMode%, 0, 0
 
@@ -87,7 +90,7 @@ if DebugOn
 	Numpad3::Move("DR")
 
 	f1::CompleteDungeon()
-	f2::ProcessSteps("Calibrate")
+	f2::CheckCombat()
 	f3::ClearZone(2, "LR", 900)
 	f4::
 	{
@@ -99,16 +102,7 @@ if DebugOn
 		;MouseClickDrag, L, x1, y1, x2, y2, 75
 		return
 	}
-	f5::
-	{
-		FightRound:=3
-		test:=6
-		test-=(FightRound*2)
-		msgbox %test%
-		;FightPath = %A_ScriptDir%/data/FightPaths/%FightPath%
-		;DoFight(FightPath)
-		RETURN
-	}
+	
 }
 
 f12::
@@ -122,6 +116,17 @@ f12::
 F8::
 {
 	StartExp()
+;	while (true)
+;	{
+;		if Timer("Energy")
+;		{
+;			;Set "3900000" to how long you want it to delay in milliseconds
+;			Timer("Energy", EnergyTimer)
+;			Sleep, 3000
+;			EnterExploration()
+;			CompleteDungeon()
+;		}
+;	}
 }
 
 Timer(Timer_Name := "", Timer_Opt := "D")

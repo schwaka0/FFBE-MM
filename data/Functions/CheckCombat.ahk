@@ -22,7 +22,6 @@ CheckCombat()
 		if (reward1) || (reward2)
 		{
 			inCombat := 0
-			StuckCombat := 0
 			return
 		}
 		StuckCombat+=1
@@ -50,10 +49,6 @@ CheckCombat()
 				UnStuck()
 			}
 		}
-		else if StuckCombat > 75
-		{
-			Move("M", , , , 1.2)						;click disconnected button
-		}
 		
 	}
 	return
@@ -62,13 +57,6 @@ CheckCombat()
 UnStuck()
 {
 	debug3=Running unstuck.
-	where:=CheckScreen("misc", "crash")
-	if where							;assume the game crashed
-	{
-		Move("M")						;click middle (where ffbe icon is)
-		Sleep, 5000
-		return
-	}
 	where:=CheckScreen("popup")
 	if where = revive
 	{
@@ -112,31 +100,12 @@ UnStuck()
 	else if where = reward3
 	{
 		Move("M")							;End of dungeon fight, click then collect rewards
-		Sleep, 1000
+		Sleep, 3000
 		CollectRewards()
 	}
-	else if (%where% = step1) || (%where% = stepv1)
+	else if (where = step1) || (where = stepv1)
 	{
-		debug3 = Unstuck step1 or stepv1 found.
-		Move("M", , 6000, 1,.77)					;Click slot1 and test for step2
-		Check:=CheckScreen("fight", "step2")
-		if Check
-		{
-			Sleep, 1000
-			Move("M", , , .2, .45)					;found step2, click back, restart.
-			RestartExp()
-		}
-		else
-		{
-			wheck:=CheckScreen("popup", "items", 1)			;check for full items
-			if where
-			{
-				PB("Items full, script will pause.")
-				MsgBox, Items full.
-				reload
-			}
-		}
-		
+		RestartExp()
 	}
 	else if where = step2
 	{
@@ -145,8 +114,13 @@ UnStuck()
 	}
 	else if where = step3
 	{
-		Move("M", 2, 4000, .2, .45)			;Click back twice
-		RestartExp()
+		Move("M", , , .2, .45)			;Click back
+		UnStuck()
+	}
+		else if where = step4
+	{
+		Move("M", , , .2, .45)			;Click back
+		UnStuck()
 	}
 	return
 }
@@ -183,7 +157,6 @@ CheckScreen(path, simg:=0, cal:=0)
 				IfMsgBox, yes
 				{
 					StringSplit, POS, POS, `,
-					Sleep, 2000
 					TakeImg(path, simg, POS1, POS2, POS3, POS4)
 				}
 			}

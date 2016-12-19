@@ -1,10 +1,10 @@
-TakeImg,misc,crash,545,37,596,64
 TakeImg,fight,step1,247,226,350,243
 M,,,,1.41
+TakeImg,fight,step2,272,786,335,806
 M,,6000,,1.8
-TakeImg,fight,step2,275,224,314,237
+TakeImg,fight,step3,275,224,314,237
 M,,,,.77
-TakeImg,fight,step3,246,880,272,909
+TakeImg,fight,step4,246,880,272,909
 M,,6000,,1.8
 TakeImg,combat,ic1,40,940,66,960,Click auto and hit OK.
 DL

@@ -3,12 +3,7 @@ global repeatcount
 DoFight(path)
 {
 	Debug3 = Fightpath: %PATH%
-	if path = DAUTO
-	{
-		Move("LD")						;dungeon enable auto only
-		return
-	}
-	else if path = AUTO
+	if path = AUTO
 	{
 		Move("LD")						;enable auto
 		Move("LD")						;disable auto
@@ -25,7 +20,6 @@ DoFight(path)
 	if (round = ERROR) || (!round)
 	{
 		round = Round%FightRound%
-		repeatcount=fclick
 	}
 	else
 	{
@@ -67,18 +61,10 @@ DoFight(path)
 		fAction4:=
 		IniRead, fAction, %path%, %round%, %unit%
 		StringSplit, fAction, fAction, `,
-;		MSGBOX %FACTION1% - %FACTION2% - %FACTION3% - %FACTION4% MSGBOX %REPEATCOUNT%
-		If fAction1 = ERROR
-		{
-			IniRead, fAction, %path%, Default, %unit%
-			StringSplit, fAction, fAction, `,
-			repeatcount=fclick
-			;continue		;Default to auto attack
-		}
-		if fAction1 = A
+		If (fAction1 = ERROR) || (fAction = A)
 		{
 			repeatcount=fclick
-			continue
+			continue		;Default to auto attack
 		}
 		else if fAction1 = C
 		{
@@ -122,6 +108,7 @@ DoFight(path)
 			Move("LD")						;disable auto
 		}
 	}
+	MSGBOX RC: %REPEATCOUNT%
 	return
 }
 
@@ -199,32 +186,17 @@ CastSpell(unit, spell, target:=0)				;;;****NEEDS IMAGE DETECTION FOR DEAD, STON
 ;				Send, 0
 ;				sleep, 500
 				y1 := MiddleY * 1.8
-				if scrolldown >= 2.5
-				{
-					y2 := MiddleY * 1.2
-					moved := 3
-				}
-				else if scrolldown >= 1.5
-				{
-					y2 := MiddleY * 1.41
-					moved := 2
-				}
-				else
-				{
-					y2 := MiddleY * 1.6
-					moved := 1
-				}
+				y2 := MiddleY * 1.6
 				SendEvent {click, %MiddleX%, %y1%, down}{click, %MiddleX%, %y2%, up}
 				
 			}
 			else
 			{
 				ControlSend, , 0, %ControlTarget%
-				moved := 1
 			}
 			Sleep,  1500
-			spell-=(moved*2)										;spell moved up 2 slots
-			scrolldown-=moved 
+			spell:=spell - 2										;spell moved up 2 slots
+			scrolldown-=1
 		}
 		ClickSpell(spell)
 	}
@@ -262,11 +234,6 @@ ClickSpell(num)
 	else if num = 6
 	{
 		Move("M",,, 1.45, 1.72)
-	}
-	else if num = 7									;target boss for raise
-	{
-		Move("M", , 1500, .5, 1.91)						;Click 'select target'
-		Move("M", , 1500, .5, .75)						;Click on boss
 	}
 	return
 }
